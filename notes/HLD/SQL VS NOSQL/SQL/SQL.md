@@ -41,7 +41,7 @@ In this image 2 values are coming in same column this should not happen.
 
 So here we have make an composite key of two column to uniquely identify the rows
 
-![After 1NF](images/after-1nf.png)
+![After 1NF](after-1nf.png)
 
 **2NF**
 
@@ -71,11 +71,13 @@ So here we have make an composite key of two column to uniquely identify the row
 Example:
 So here I have table in that we are considering candidate key as (ORDER_NUMBER, PRODUCT_CODE) but like we have few non key columns like(Quantity, ITEM_PRICE, )
 
-![Before 2NF](images/before-2nf.png)
+![Before 2NF](../../images/before-2nf.png)
 
-![After 2NF](images/after-2nf.png)
+![Before 2NF](before-2NF.png)
 
-![Relation 2NF](images/relation-2nf.png)
+![After 2NF](after-2NF.png)
+
+![Relation 2NF](relation-2nf.png)
 
 
 **3NF**

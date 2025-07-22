@@ -169,17 +169,18 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "9cc342247ede611d",
+  "active": "f15906aa98dc76e8",
   "lastOpenFiles": [
     "README.md",
     "notes/HLD/SQL VS NOSQL/SQL/SQL.md",
+    "notes/images/roadmap.jpg",
     "notes/HLD/SQL VS NOSQL/SQL",
-    "notes/HLD/SQL VS NOSQL/images/relation-2nf.png",
-    "notes/HLD/SQL VS NOSQL/images/before-2NF.png",
-    "notes/HLD/SQL VS NOSQL/images/before-1nf.png",
-    "notes/HLD/SQL VS NOSQL/images/after-2NF.png",
-    "notes/HLD/SQL VS NOSQL/images/after-1nf.png",
-    "notes/HLD/SQL VS NOSQL/images",
+    "notes/images/relation-2nf.png",
+    "notes/images/before-2NF.png",
+    "notes/images/before-1nf.png",
+    "notes/images/after-2NF.png",
+    "notes/images/after-1nf.png",
+    "notes/images",
     "notes/HLD/SQL VS NOSQL"
   ]
 }
