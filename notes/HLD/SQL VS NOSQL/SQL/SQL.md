@@ -6,7 +6,7 @@ A relational database stores data in tables made of rows and columns, and uses k
 
 **Normalisation**
 
-**Normalisation** is the process of organizing data in a database to **reduce redundancy (duplicate data)** and **improve consistency**.  
+**Normalisation** is the process of organising data in a database to **reduce redundancy (duplicate data)** and **improve consistency**.  
 It involves **splitting a large table into two or more smaller related tables**.
 
  **Insertion Anomaly**
