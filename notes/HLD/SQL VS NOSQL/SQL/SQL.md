@@ -80,9 +80,6 @@ So here I have table in that we are considering candidate key as (ORDER_NUMBER, 
 
 **3NF**
 
-
-
-
 -------------
 
 
