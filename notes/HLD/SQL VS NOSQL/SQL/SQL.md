@@ -71,7 +71,7 @@ So here we have make an composite key of two column to uniquely identify the row
 Example:
 So here I have table in that we are considering candidate key as (ORDER_NUMBER, PRODUCT_CODE) but like we have few non key columns like(Quantity, ITEM_PRICE, )
 
-![Before 2NF](../../images/before-2nf.png)
+![Before 2NF](before-2nf.png)
 
 ![Before 2NF](before-2NF.png)
 
