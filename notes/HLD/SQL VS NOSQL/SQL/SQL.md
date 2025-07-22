@@ -37,7 +37,7 @@ Every row should be unique. either through a single column table or multiple col
 
 In this image 2 values are coming in same column this should not happen.
 
-![Before 1NF](../../../../images/before-1nf.png)
+![Before 1NF](before-1nf.png)
 
 So here we have make an composite key of two column to uniquely identify the rows
 
