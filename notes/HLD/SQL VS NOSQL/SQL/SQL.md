@@ -30,8 +30,10 @@ An **update anomaly** happens when **changing a value** requires **multiple upda
 
 **Example:**  
 If you want to **increase the salary** for all employees in the **HR department**, you must update the value in **every HR employee's record**. If you miss one, the data becomes **inconsistent**.
+![Anomaly](../../../images/anomaly.png)
 
 **1NF**
+
 Every column need to have single value.
 Every row should be unique. either through a single column table or multiple column table
 
@@ -69,18 +71,44 @@ So here we have make an composite key of two column to uniquely identify the row
 - If there is any non-key column which depends only on one of the candidate key columns, then this results in partial dependency.
 
 Example:
-So here I have table in that we are considering candidate key as (ORDER_NUMBER, PRODUCT_CODE) but like we have few non key columns like(Quantity, ITEM_PRICE, )
+So here I have table in that we are considering candidate key as (ORDER_NUMBER, PRODUCT_CODE) but like we have few non key columns like(Quantity, ITEM_PRICE, TOTAL_COST, ORDER_DATE, STATUS) so these columns are only depends upon ORDER_NUMBER so we can separate this into two different tables.
+Similarly (PRODUCT_NAME, PRODUCT_PRICE) is depend upon PRODUCT_CODE so again
+we can separate it out these tables also.
 
 ![Before 2NF](../../../images/before-2NF.png)
 
+After separating out the table it looks like these so here we have introduce the 3 new columns
+ORDER_ID, PRODUCT_CODE(removed duplicate), CUSTOMER_ID.
 ![After 2NF](../../../images/after-2NF.png)
+
+Now following the 2nd point we have to make the relationship between them.
 
 ![Relation 2NF](../../../images/relation-2nf.png)
 
 
 **3NF**
+1. Avoid Transitive dependencies.
+
+So Transitive dependencies is lets say we three column A, B, C. If A is a functionally dependent on B and B is functionally dependent on C than we can say A is functionally dependent on C.
+Example : We have one column CUSTOMER_NAME(A) which is dependent on ORDER_ID(B) and we have another column SALES_PERSON_NAME(C) which is dependent on ORDER_ID(B) so in a way if we know column CUSTOMER_NAME we can get the ORDER_ID and we know ORDER_ID than we can get the data of  SALES_PERSON_NAME. so this is called transitive dependencies.
+
+So we will separate out SALES_DETAILS and remove the duplicates and create a relationship.
+
+![Relation 3NF](../../../images/3nf.png)
 
 -------------
+
+**ACID Properties**
+
+It ensures that transaction are processed reliably and accurately.
+
+A -> Atomicity: It ensures a single unit of work Either execute all operations (commit) or none of them are applied (rollback).
+Example :- so ram is transferring money to Shyam account so money should get deducted from ram account and get credited to Shyam account as a single operation so if at any movement any transaction fails (due to Network Failure/system crash) so the entire transaction should get rollback.
+C -> Consistency: Read should fetch upto date data and write shouldn't violate integrity constraints.
+I -> Isolation: One transaction should be independent from others.
+D -> Durability: The committed transaction should remain even after a failure/crash.
+
+1. 
 
 
 
