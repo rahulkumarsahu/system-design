@@ -103,12 +103,34 @@ So we will separate out SALES_DETAILS and remove the duplicates and create a rel
 It ensures that transaction are processed reliably and accurately.
 
 A -> Atomicity: It ensures a single unit of work Either execute all operations (commit) or none of them are applied (rollback).
-Example :- so ram is transferring money to Shyam account so money should get deducted from ram account and get credited to Shyam account as a single operation so if at any movement any transaction fails (due to Network Failure/system crash) so the entire transaction should get rollback.
+
+Example: so ram is transferring money to Shyam account so money should get deducted from ram account and get credited to Shyam account as a single operation so if at any movement any transaction fails (due to Network Failure/system crash) so the entire transaction should get rollback.
+
 C -> Consistency: Read should fetch upto date data and write shouldn't violate integrity constraints.
+1. Read operation retrieve consistent and up-to-date data from the database.
+2. Write operation ensures that data modification maintain the database constraints.(such as
+    foreign key relationships or unique constraints so that data remain accurate).
+    
+Example: Suppose you have ₹X in your account and Ram has ₹R. At the same time, you transfer ₹Y to Ram, and Ram transfers ₹Z to you. Even though these transactions happen simultaneously, the total amount of money in both accounts should remain the same.
+    
 I -> Isolation: One transaction should be independent from others.
+3. it ensures that if there are two transaction 1 and 2, then the changes made by transaction 1
+   are not visible to transaction 2 until transaction 1 is commit.
+
+Example:  Transaction 1 update value A to 50 (previously A value was 40)
+         Transaction 2 read/get/fetch value A
+         if Transaction 1 is committed according to Transaction 2 the value of A = 50
+         if Transaction 1 is pending/running according to Transaction 2 the value of A = 40
+         which is shown as data inconsistency so we should always wait for Transaction 1 to complete first for data consistency.
+         
 D -> Durability: The committed transaction should remain even after a failure/crash.
 
-1. 
+Example: if ram is transferring X money to Shyam account so we will check balance and
+deduct the money from ram account and suppose our data is in committed phase and system got crash or encounter network failure. so when the system backup both ram and Shyam account will reflected with updated balance.
+
+-------------
+
+
 
 
 
