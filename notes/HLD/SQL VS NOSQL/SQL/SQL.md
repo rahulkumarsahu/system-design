@@ -130,6 +130,8 @@ deduct the money from ram account and suppose our data is in committed phase and
 
 -------------
 
+**Transaction & Concurrency Control**
+
 
 
 
