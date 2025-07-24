@@ -178,6 +178,7 @@ So the problem will be in one process multiple threads are there so synchronize 
 **DB Locking make sure that no other transaction update the locker rows.**
 1. shared lock (suppose one transaction acquire the shared lock than only read can happen but not write by other transaction but here multiple transaction can have shared lock only for reading)
 2. exclusive lock (suppose one transaction acquire the shared lock than it cannot even read it and cannot even write it by other transaction but this lock can be acquired by only one transaction)
+![locking](../../../images/lock.png)
 
 ***Pessimistic Locking***
 
@@ -185,12 +186,17 @@ At given point of time one thread is executing critical section while others are
 
 So Basically in this locking at starting only the lock will be acquire by one threads and until this finishes the set of operation other threads or process who are ready to execute they have to wait to get the lock released.
 
-**Optimistic Locking**
+Deadlock: I have two transaction t1 and t2. t1 has to read value A and write to B and t2 has to read value B and write to the value A. t1 acquire shared lock and read value of A similarly t2 acquire shared lock reads the value B. now t2 wants to write to A and t1 wants to write to B so both are waiting for each other to finish so they can update the value this is the deadlock scenario.
+
+**Optimistic Locking**(less chance of concurrency very high(0) level of concurrency)
 
 if two threads tried to do same operation at the same time then one succeeds and other fails. It is for distributed system.
 
-it works on comapare_and_swap  which is atomic in nature so I will take an example like their are two transaction which are going to update one value t1 -> count(10, 11) and t2 -> count(10, 15)
-so here what will happen that one will get success and one will fail because optimistic locking first compare with old value when it acquires if while updating the old value is same and if it change it will fail the transaction so suppose t2 got failed we can do anything with that either retry or either fail or throw the error.
+Example:
+![locking](../../../images/lock-ex.png)
+![locking example](../../../images/lock-ex2.png)
+
+So here Transaction A acquires the read commit lock which reads and release the lock at the same time transaction B has started and acquires the read lock which reads and release the lock but T.A has acquire exclusive lock for updating the data and while updating it validates if version is correct or not if versions are correct it commit the transaction now when T.B tries to commit the changes it sees the version is different so it will rollback the changes.
 
 Example:
 here I am considering 3rd column as version suppose same here 2 transaction is their t1 wants to update so initial t1 updates the data and version is v1 and after updating the version will be v2 and now suppose t1 and t2 parallelly trying to update the data than while updating data if version got changed suppose t1 changed the data to v3 but t2 was expecting version to be v2 in that case t2 will get fail. so after that we can do anything with that either retry or either fail or throw the error.
@@ -253,15 +259,21 @@ As name suggests it says data is uncommitted but t1 can read the data of t2 tran
 ![read committed](../../../images/read-committed.png)
 
 so it clearly says t1 will be able to read the data when t2 commits its data so it solves only dirty read problem.
+here what will happen suppose t1 and t2 two transaction are their so t2 comes acquire exclusive lock and updates the data so next time t1 comes to read the data it will get updated value and t1 acquire read lock so it will allow al read operation but not write operation. which solves dirty read but non-repeatable is not because in between updated and t1 will get initially different value later on different value in same transaction and phantom is also not solved because updating is happening.
 
 **Read Repeatable**
 ![repeat read](../../../images/repeat-read.png)
 
 it clearly says t1 is reading the value and doing some operation so t2 cannot come and do not insert any new record which solves the phantom problem.
 
+here what will happen we have t1 and t2 and t1 acquire the shared lock but it release the lock at the end of transaction so t2 will not be able to get exclusive lock so in that way it will be able to solve the both dirty read and non-repeatable read. but t2 can acquire read lock that is why phantom is possible.
+
 **Serializable**
 ![serial](../../../images/serial.png)
-here no anomaly will be present
+here no anomaly will be present. so here we are performing a query ID>= 1and ID <=4 so in this range is lock so all rows will be lock so no other transaction can update.
+
+So based on question we will decide which fits better based on above consistency graph.
+
 
 -----------
 
