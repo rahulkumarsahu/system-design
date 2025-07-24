@@ -130,8 +130,48 @@ deduct the money from ram account and suppose our data is in committed phase and
 
 -------------
 
-**Transaction & Concurrency Control**
+**Transactions**
 
+Transaction is a unit of work that consist one or more database operation (read/write/commit/rollback) and read and write in transaction follows the ACID property.
+
+![transaction-1](../../../images/transaction-1.png)
+So here we are making an order in swiggy but if we get network failure so if any money got deducted it will get rollback to our account otherwise if no issues has been encounter than transaction will be successful.
+here how things are working is for making an swiggy order it has to cut some money from my account create an order etc. so each operation is an transaction so every transaction will get stored in transaction log and if everything got success than it will go to commit phase and from their data will get saved into database.
+
+Example :
+![Transaction-2](../../../images/transaction-2.png)
+
+**Concurrency Control**
+Concurrency ensures that multiple transaction can run concurrently without compromising data consistency.
+
+Example:
+1. Ram is giving 100rs to Shyam.
+2. Shyam is giving 50rs to ram.
+So both are different transaction T1 and T2 and it is trying to modify the same value so T1 should be independent for T2 and data should be consistent.
+
+Some technique used here is:
+1. Locking (Pessimistic, Optimistic)
+2. Two-Phase Locking
+3. Timestamp ordering
+
+**Pessimistic Locking**
+
+At given point of time one thread is executing critical section while others are waiting. so it affects the through put like threads or process are ready to execute but waiting for locks. It is not for distributed system.
+
+So Basically in this locking at starting only the lock will be acquire by one threads and until this finishes the set of operation other threads or process who are ready to execute they have to wait to get the lock released.
+
+**Optimistic Locking**
+
+if two threads tried to do same operation at the same time then one succeeds and other fails. It is for distributed system.
+
+it works on comapare_and_swap  which is atomic in nature so I will take an example like their are two transaction which are going to update one value t1 -> count(10, 11) and t2 -> count(10, 15)
+so here what will happen that one will get success and one will fail because optimistic locking first compare with old value when it acquires if while updating the old value is same and if it change it will fail the transaction so suppose t2 got failed we can do anything with that either retry or either fail or throw the error.
+
+Example:
+here I am considering 3rd column as version suppose same here 2 transaction is their t1 wants to update so initial t1 updates the data and version is v1 and after updating the version will be v2 and now suppose t1 and t2 parallelly trying to update the data than while updating data if version got changed suppose t1 changed the data to v3 but t2 was expecting version to be v2 in that case t2 will get fail. so after that we can do anything with that either retry or either fail or throw the error.
+![optimistic](../../../images/optimistic.png)
+
+if there is a article and 500 people are trying to update than it will be not good idea to use optimistic lock because lots of version mismatch will fail.
 
 
 
