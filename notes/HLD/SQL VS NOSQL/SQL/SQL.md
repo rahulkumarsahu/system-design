@@ -175,6 +175,10 @@ we can use synchronize so at a time only one user1 have access so user 1 will bo
 
 So the problem will be in one process multiple threads are there so synchronize will be able to handle the request but suppose we have microservice in that their will be multiple processes so in that case synchronize will not work and it will give the error comes optimistic and pessimistic locking.
 
+DB Locking make sure that no other transaction update the locker rows.
+1. shared lock (suppose one transaction acquire the shared lock than only read can happen but not write by other transaction but here multiple transaction can have shared lock only for reading)
+2. exclusive lock (suppose one transaction acquire the shared lock than it cannot even read it and cannot even write it by other transaction but this lock can be acquired by only one transaction)
+
 **Pessimistic Locking**
 
 At given point of time one thread is executing critical section while others are waiting. so it affects the through put like threads or process are ready to execute but waiting for locks. It is not for distributed system.
