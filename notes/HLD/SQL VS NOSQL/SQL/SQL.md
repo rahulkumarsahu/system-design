@@ -175,11 +175,11 @@ we can use synchronize so at a time only one user1 have access so user 1 will bo
 
 So the problem will be in one process multiple threads are there so synchronize will be able to handle the request but suppose we have microservice in that their will be multiple processes so in that case synchronize will not work and it will give the error comes optimistic and pessimistic locking.
 
-DB Locking make sure that no other transaction update the locker rows.
+**DB Locking make sure that no other transaction update the locker rows.**
 1. shared lock (suppose one transaction acquire the shared lock than only read can happen but not write by other transaction but here multiple transaction can have shared lock only for reading)
 2. exclusive lock (suppose one transaction acquire the shared lock than it cannot even read it and cannot even write it by other transaction but this lock can be acquired by only one transaction)
 
-**Pessimistic Locking**
+***Pessimistic Locking***
 
 At given point of time one thread is executing critical section while others are waiting. so it affects the through put like threads or process are ready to execute but waiting for locks. It is not for distributed system.
 
@@ -206,42 +206,60 @@ There are two transaction t1 and t2 and it should be isolated from each other.
 
 In system where multiple transactions are executed concurrently, isolation levels manage the extent to which the operations of one transactions are isolated from those of other transaction.
 
+So Isolation tell till what level of concurrency applied in your application.
+
 **These are anomalies of isolation**
 
-Dirty Read
+**Dirty Read**
+
+![dirty](../../../images/dirty.png)
+
 Reading data written by a transaction that has not yet committed. consider it T1 and T2 are two transaction so suppose t1 is doing set of operations which includes multiple write and read operation and same time t2 comes and read the value which will get updated value but at some point t1 fails and rollback than t2 has read the wrong value which is an data anomaly.
+
 ![Dirty Read](../../../images/dirty-read.png)
+![dirty example](../../../images/dirty-ex.png)
 
 
-Non Repeatable Read
+**Non Repeatable Read**
+
+if suppose Transaction A reads the same row several times and there is a chance that it reads the different value.
+![repeat-ex](../../../images/repeat-ex.png)
 
 ![Non Repeatable](../../../images/non-repeat.png)
 
 Example:
 Consider again we are doing two transaction t1 and t2 and t1 has two read operation and does some write operation in different table and t2 has read write operation in same table which t1 is using and now what happened t1 reads the value as 10 and after that it got stop for some reason and mean time t2 updated the data from 10 to 20 and again when t1 reads the data so it will get data as 20 but it started operation on 10  so that is another anomaly.
 
-Phantom Read
+**Phantom Read**
+If suppose transaction A, executes same query several times and there is a chance that the rows returned are different.
+![phantom-ex](../../../images/phantom-ex.png)
 
 ![phantom](../../../images/phantom.png)
 Example: suppose their is one transaction t1 which fetch the records does some operation and again fetch some records but while t1 is performing the operation in same time t2 came and insert one new row in the table so now when t1 reads the same  table data it gets 3 column instead of 2 because new row inserted that is another anomaly.
 
 **Type of Isolation level**
 
-Read Uncommitted
+![level example](../../../images/level-ex.png)
+
+![level](../../../images/level.png)
+
+**Read Uncommitted**
+No lock is acquired so all 3 above anomaly is not resolved.
+
 ![read uncommitted](../../../images/read-uncommitted.png)
 As name suggests it says data is uncommitted but t1 can read the data of t2 transaction so it does not resolve any anomalies.
 
-Read Committed
+**Read Committed**
 ![read committed](../../../images/read-committed.png)
 
 so it clearly says t1 will be able to read the data when t2 commits its data so it solves only dirty read problem.
 
-Read Repeatable
+**Read Repeatable**
 ![repeat read](../../../images/repeat-read.png)
 
 it clearly says t1 is reading the value and doing some operation so t2 cannot come and do not insert any new record which solves the phantom problem.
 
-Serializable
+**Serializable**
 ![serial](../../../images/serial.png)
 here no anomaly will be present
 
