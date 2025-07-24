@@ -192,6 +192,8 @@ Deadlock: I have two transaction t1 and t2. t1 has to read value A and write to 
 
 if two threads tried to do same operation at the same time then one succeeds and other fails. It is for distributed system.
 
+Deadlock: it is not their in optimistic so t1 acquire the shared lock and as soon as read it release the lock follow read committed similarly for t2 and for write both acquire exclusive lock so no deadlock will occur here.
+
 Example:
 ![locking](../../../images/lock-ex.png)
 ![locking example](../../../images/lock-ex2.png)
