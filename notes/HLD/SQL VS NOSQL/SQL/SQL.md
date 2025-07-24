@@ -154,6 +154,27 @@ Some technique used here is:
 2. Two-Phase Locking
 3. Timestamp ordering
 
+***Concurrency Control Mechanism***
+It is a process of managing multiple user access and modification in data simultaneously in shared or multi-user database systems.
+
+How it helps? -> Data consistency, Isolation Serializable
+
+So these mechanism is needed to ensure that transactions are executed concurrently without leading to any inconsistencies in the database. we have some technique to make a schedule serializable.
+
+Lost Updates: when two or more transaction update the same data simultaneously, one of the data might lost for example if two user modify the same record at the same time the change made by one user could be overwrite the changes made by other user.
+
+Dirty Read: when a transaction reads the data which has been modified by other transaction but not committed yet and if the transaction rollback, the other transaction will have invalid data.
+
+**Scenario**
+Many concurrent request tries to book same ticket?
+
+So initially when 3 user tries to book a seat so at the same time all 3 request for same seat that in DB status is free so for all 3 user this will get booked
+
+how we will solve this?
+we can use synchronize so at a time only one user1 have access so user 1 will book the ticket and other two user will not be able to book the ticket but **is it good from distributed system**?
+
+So the problem will be in one process multiple threads are there so synchronize will be able to handle the request but suppose we have microservice in that their will be multiple processes so in that case synchronize will not work and it will give the error comes optimistic and pessimistic locking.
+
 **Pessimistic Locking**
 
 At given point of time one thread is executing critical section while others are waiting. so it affects the through put like threads or process are ready to execute but waiting for locks. It is not for distributed system.
@@ -219,6 +240,9 @@ it clearly says t1 is reading the value and doing some operation so t2 cannot co
 Serializable
 ![serial](../../../images/serial.png)
 here no anomaly will be present
+
+-----------
+
 
 
 
