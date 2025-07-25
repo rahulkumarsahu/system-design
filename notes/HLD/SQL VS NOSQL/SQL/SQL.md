@@ -279,7 +279,25 @@ So based on question we will decide which fits better based on above consistency
 
 -----------
 
+**Database Recovery Management**
 
+It involves the strategies and processes to restore a database to a consistent state after a failure or crash.
+
+Types of database failure:
+ 1. Transaction Failure: Occurs when a transaction cannot complete successfully due to logical error or system issues (like deadlocks).
+ 2. System Failure: Occurs when the entire system crashes due to hardware or software failure leading to loss of in-memory data.
+ 3. Media Failure: Occurs when the physical storage is damaged, resulting in data loss or corruption.
+
+Recovery Phases:
+1. Analysis Phase: identifies the point of failure and transaction were active at that time.
+2. Redo Phase: Reapplies changes from committed transaction to ensure the database reflects all the completed operation
+3. Undo Phase: reverts the effect of incomplete transaction to maintain the data consistency.
+
+Recovery Technique:
+1. Backup & Restore: Regular backups are taken to ensure data can be restored. **Full incremental and differential backup** are common types.
+2. Logging: Keeps a record of all transactions. The Write ahead logging (WAL) protocol ensure that logs were written before any changes applied to the database.
+3. Shadow Paging: Maintain two copies of the database pages; one is updated and the other remains unchanged until the transaction commits.
+--------------
 
 
 
