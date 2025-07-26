@@ -133,8 +133,7 @@ deduct the money from ram account and suppose our data is in committed phase and
 **Transactions**
 
 Transaction is a unit of work that consist one or more database operation (read/write/commit/rollback) and read and write in transaction follows the ACID property.
-
-![transaction-1](../../../images/transaction-1.png)
+![Relation 3NF](../../../images/transaction-1.png)
 So here we are making an order in swiggy but if we get network failure so if any money got deducted it will get rollback to our account otherwise if no issues has been encounter than transaction will be successful.
 here how things are working is for making an swiggy order it has to cut some money from my account create an order etc. so each operation is an transaction so every transaction will get stored in transaction log and if everything got success than it will go to commit phase and from their data will get saved into database.
 
