@@ -243,8 +243,88 @@ This protocol ensures the serializability by dividing the execution of a transac
 
 1. **Growing Phase**: A transaction can acquire locks but cannot release any. This phase continues until the transaction has obtain all the lock it needs.
 2. **Shrinking Phase:** After the transaction release its first lock it can not acquire any new locks. During this phase the transaction release all the locks it holds.
+This rule **prevents conflicting operations** from happening in the wrong order.
+
+- Multiple transactions **can run together**.
+- But they **wait** for each other when needed.
+- So there is **controlled interleaving**, but **no data conflict**.
 ![2pl-ex](../../../images/2pl-ex.png)
-So here in above image 
+So here in above image T1 is acquiring the exclusive lock on A and after that performing read and write operation now T2 comes but it will not be able to acquire lock because it is in growing phase and now T1 acquires the shared lock on B and performing Read on B and after that is releasing the lock on A and B and now T2 can acquire lock so it is showing concurrently but things is happening serially.
+So in S-X locking there were some disadvantage which we have achieve here like Serializability, Concurrently, Data Integrity(keeping the **data correct, accurate, and trustworthy** in a database.). but Starvation, Deadlock, and Data Irrecoverable is still persist from S-X locking.
+
+**Advantages** :
+1. It guarantees that the schedule of transactions will be serializable, meaning the
+   results of executing transactions concurrently will be the same as if they were
+   executed in some serial order.
+2. By ensuring that transactions are serializable, 2PL helps maintain data integrity and
+   consistency, which is critical in environments where data accuracy is essential.
+**Disadvantages** :
+3. Deadlocks, starvation and cascading rollbacks
+4. Transactions must wait for locks to be released by other transactions. This can lead
+   to increased waiting times and lower system throughput.
+5. In case of a system failure, recovering from a crash can be complex
+
+**Strict Two-Phase Locking(Strict 2PL)**
+A stricter variant where **exclusive locks** are held until the transaction commits or aborts.
+This helps prevent cascading rollbacks (where one transactions rollback causes other
+transactions to roll back).
+**Advantages**:
+1. Prevents Cascading Aborts
+2. Ensures Strict Serializability
+**Disadvantages**:
+3. Since write locks are held until the end of the transaction, other transactions may be
+   blocked for extended periods
+4. Transactions may experience longer wait times to acquire locks
+5. Deadlocks and starvation is there
+It says locks should be available till one transaction commits or aborts so because of this till one transaction is finish it will not release the lock and another transaction will not be able to make any changes in data either new transaction will get updated data or rollback data.
+**2PL** Can be released **any time** after entering the shrinking phase — **before** the transaction ends.
+**2PL-Strict** **Only at the end** of the transaction (commit/abort).
+
+**Rigorous Two-Phase Locking**
+An even stricter version where all locks (**both shared and exclusive**) are held until the
+transaction commits. This guarantees strict serializability.
+**Advantages**:
+1. Since all locks are held until the end of the transaction, the system can easily ensure
+   that transactions are serializable and can be recovered
+2. Prevents Cascading Aborts and Dirty Reads (In strict 2pl exclusive lock can be released but shared lock can be acquire so after write because of any reason rollback happens that dirty read still persist).
+**Disadvantages**:
+3. Performance bottlenecks
+4. Increased Transaction Duration
+5. Deadlocks and starvation is there
+
+**Conservative Two-Phase Locking**
+Conservative Two-Phase Locking(Static Two-Phase Locking) is a variant of the standard
+2PL protocol that aims to prevent deadlocks entirely by requiring a transaction to
+acquire all the locks it needs before it begins execution.
+
+If the transaction is unable to acquire all the required locks (because some are already
+held by other transactions), it waits and retries. The transaction only starts execution
+once it has successfully acquired all the necessary locks.
+
+Since a transaction never starts executing until it has all the locks it needs, deadlocks
+cannot occur because no transaction will ever hold some locks and wait for others
+
+**In this scenario, deadlocks cannot occur because neither T1 nor T2 starts execution until**
+**it has all the locks it needs.**
+
+![2pl](../../../images/2pl.png)
+So here T1 comes and acquire all the locks on A and B so till than T1 completes T2 cannot do any transaction.
+
+**Timestamp-Based Protocols: It assign a unique timestamp**
+
+Every transaction is **assigned a unique timestamp** when it enters the system. It is
+used to order the transactions based on their Timestamps.
+
+There are two important timestamps for each data item:
+Read Timestamp (RTS): The last timestamp of any transaction that has
+successfully read the data item.
+
+Write Timestamp (WTS): The last timestamp of any transaction that has
+successfully written the data item.
+
+Transaction with smaller timestamp(Old) -> Transaction with larger timestamp(young)
+![TBL](../../../images/TBL.png)
+
 
 ---------------
 
