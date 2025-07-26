@@ -221,8 +221,10 @@ Deadlock: I have two transaction t1 and t2. t1 has to read value A and write to 
 ![Deadlock](../../../images/deadlock-2.png)
 ![Deadlock-2](../../../images/deadlock-1.png)
 **Deadlock Prevention Strategies**
-1. Timeout In this strategy, schedule find out that TXN is waiting too long for the lock, it simply assumes that there might be a deadlock involving this transaction and thus abort it. Scheduler can make mistake (what if TXN1 wait for the lock, which is acquired by other TX2 which is just taking long time to finish.)
-2. 
+1. **Timeout** In this strategy, schedule find out that TXN is waiting too long for the lock, it simply assumes that there might be a deadlock involving this transaction and thus abort it. Scheduler can make mistake (what if TXN1 wait for the lock, which is acquired by other TX2 which is just taking long time to finish.)
+2. **Wait for Graph** In this strategy Scheduler will create an graph of all upcoming lock which depends on what and if one is released the lock schedule delete the edge, whenever lock is release by particular TXN which causing some other TXN to wait. Schedule looks for cycle in the WFG and try to find out the cycle.
+![Victim](../../../images/victim.png)
+3. Conservative explain below
 **Optimistic Locking**(less chance of concurrency very high(0) level of concurrency)
 
 if two threads tried to do same operation at the same time then one succeeds and other fails. It is for distributed system.
@@ -312,6 +314,8 @@ cannot occur because no transaction will ever hold some locks and wait for other
 **In this scenario, deadlocks cannot occur because neither T1 nor T2 starts execution until**
 **it has all the locks it needs.**
 
+**Cons** less concurrency
+
 ![2pl](../../../images/2pl.png)
 So here T1 comes and acquire all the locks on A and B so till than T1 completes T2 cannot do any transaction.
 
@@ -350,6 +354,12 @@ For **Write**:
 > In timestamp ordering protocol, **younger transactions can’t disturb what older transactions did**So we **rollback the younger one** to **protect the older one's work** and **keep order correct**.
 ---------------
 
+**Cascading Abort**
+Suppose we have two transaction t1 and t2 so t1 started acquire all the lock in growing phase and now T1 moves to shrinking phase so T2 acquires the lock and reads the value which is dirty read because T1 has aborted.
+![Cascade](../../../images/cascade.png)
+
+
+----------
 **Isolation Level**
 
 There are two transaction t1 and t2 and it should be isolated from each other.
