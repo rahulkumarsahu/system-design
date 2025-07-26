@@ -218,13 +218,16 @@ At given point of time one thread is executing critical section while others are
 So Basically in this locking at starting only the lock will be acquire by one threads and until this finishes the set of operation other threads or process who are ready to execute they have to wait to get the lock released.
 
 Deadlock: I have two transaction t1 and t2. t1 has to read value A and write to B and t2 has to read value B and write to the value A. t1 acquire shared lock and read value of A similarly t2 acquire shared lock reads the value B. now t2 wants to write to A and t1 wants to write to B so both are waiting for each other to finish so they can update the value this is the deadlock scenario.
-
+![Deadlock](../../../images/deadlock-2.png)
+![Deadlock-2](../../../images/deadlock-1.png)
+**Deadlock Prevention Strategies**
+1. Timeout In this strategy, schedule find out that TXN is waiting too long for the lock, it simply assumes that there might be a deadlock involving this transaction and thus abort it. Scheduler can make mistake (what if TXN1 wait for the lock, which is acquired by other TX2 which is just taking long time to finish.)
+2. 
 **Optimistic Locking**(less chance of concurrency very high(0) level of concurrency)
 
 if two threads tried to do same operation at the same time then one succeeds and other fails. It is for distributed system.
 
 Deadlock: it is not their in optimistic so t1 acquire the shared lock and as soon as read it release the lock follow read committed similarly for t2 and for write both acquire exclusive lock so no deadlock will occur here.
-
 Example:
 ![locking](../../../images/lock-ex.png)
 ![locking example](../../../images/lock-ex2.png)
@@ -237,12 +240,14 @@ here I am considering 3rd column as version suppose same here 2 transaction is t
 
 if there is a article and 500 people are trying to update than it will be not good idea to use optimistic lock because lots of version mismatch will fail.
 
-**Two-Phase Locking (2PL)**
+**Two-Phase Locking (2PL)**(Type of pessimistic locking)
 
 This protocol ensures the serializability by dividing the execution of a transaction in two phase.
 
 1. **Growing Phase**: A transaction can acquire locks but cannot release any. This phase continues until the transaction has obtain all the lock it needs.
 2. **Shrinking Phase:** After the transaction release its first lock it can not acquire any new locks. During this phase the transaction release all the locks it holds.
+![graph](../../../images/graph.png)
+
 This rule **prevents conflicting operations** from happening in the wrong order.
 
 - Multiple transactions **can run together**.
@@ -280,7 +285,7 @@ It says locks should be available till one transaction commits or aborts so beca
 **2PL** Can be released **any time** after entering the shrinking phase — **before** the transaction ends.
 **2PL-Strict** **Only at the end** of the transaction (commit/abort).
 
-**Rigorous Two-Phase Locking**
+**Rigorous Two-Phase Locking** (Widely used in company)
 An even stricter version where all locks (**both shared and exclusive**) are held until the
 transaction commits. This guarantees strict serializability.
 **Advantages**:
