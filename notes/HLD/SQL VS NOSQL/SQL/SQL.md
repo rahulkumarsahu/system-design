@@ -133,12 +133,12 @@ deduct the money from ram account and suppose our data is in committed phase and
 **Transactions**
 
 Transaction is a unit of work that consist one or more database operation (read/write/commit/rollback) and read and write in transaction follows the ACID property.
-![Transaction-1](../../../images/transaction-1.png)
+![Transaction-1](../../../images/transaction-1.PNG)
 So here we are making an order in swiggy but if we get network failure so if any money got deducted it will get rollback to our account otherwise if no issues has been encounter than transaction will be successful.
 here how things are working is for making an swiggy order it has to cut some money from my account create an order etc. so each operation is an transaction so every transaction will get stored in transaction log and if everything got success than it will go to commit phase and from their data will get saved into database.
 
 Example :
-![Transaction-2](../../../images/transaction-2.png)
+![Transaction-2](../../../images/transaction-2.PNG)
 
 **Concurrency Control**
 Concurrency ensures that multiple transaction can run concurrently without compromising data consistency.
@@ -208,7 +208,7 @@ transactions hold locks that the other transactions need.
 **Irrecoverable** : If Transaction B commits after the lock is release based on a modified value
 in transaction A which fails after sometime. so T1 acquires the X lock and does some operation and T2 acquire X lock and does some update in same table but T1 got fail later on so it will rollback the changes but in that case T2 is not get rollback.
 
-![locking](../../../images/lock.png)
+![locking](../../../images/lock.PNG)
 
 ***Pessimistic Locking***
 
@@ -217,12 +217,12 @@ At given point of time one thread is executing critical section while others are
 So Basically in this locking at starting only the lock will be acquire by one threads and until this finishes the set of operation other threads or process who are ready to execute they have to wait to get the lock released.
 
 Deadlock: I have two transaction t1 and t2. t1 has to read value A and write to B and t2 has to read value B and write to the value A. t1 acquire shared lock and read value of A similarly t2 acquire shared lock reads the value B. now t2 wants to write to A and t1 wants to write to B so both are waiting for each other to finish so they can update the value this is the deadlock scenario.
-![Deadlock](../../../images/deadlock-2.png)
-![Deadlock-2](../../../images/deadlock-1.png)
+![Deadlock](../../../images/deadlock-2.PNG)
+![Deadlock-2](../../../images/deadlock-1.PNG)
 **Deadlock Prevention Strategies**
 1. **Timeout** In this strategy, schedule find out that TXN is waiting too long for the lock, it simply assumes that there might be a deadlock involving this transaction and thus abort it. Scheduler can make mistake (what if TXN1 wait for the lock, which is acquired by other TX2 which is just taking long time to finish.)
 2. **Wait for Graph** In this strategy Scheduler will create an graph of all upcoming lock which depends on what and if one is released the lock schedule delete the edge, whenever lock is release by particular TXN which causing some other TXN to wait. Schedule looks for cycle in the WFG and try to find out the cycle.
-![Victim](../../../images/victim.png)
+![Victim](../../../images/victim.PNG)
 3. Conservative explain below
 **Optimistic Locking**(less chance of concurrency very high(0) level of concurrency)
 
@@ -230,14 +230,14 @@ if two threads tried to do same operation at the same time then one succeeds and
 
 Deadlock: it is not their in optimistic so t1 acquire the shared lock and as soon as read it release the lock follow read committed similarly for t2 and for write both acquire exclusive lock so no deadlock will occur here.
 Example:
-![locking](../../../images/lock-ex.png)
-![locking example](../../../images/lock-ex2.png)
+![locking](../../../images/lock-ex.PNG)
+![locking example](../../../images/lock-ex2.PNG)
 
 So here Transaction A acquires the read commit lock which reads and release the lock at the same time transaction B has started and acquires the read lock which reads and release the lock but T.A has acquire exclusive lock for updating the data and while updating it validates if version is correct or not if versions are correct it commit the transaction now when T.B tries to commit the changes it sees the version is different so it will rollback the changes.
 
 Example:
 here I am considering 3rd column as version suppose same here 2 transaction is their t1 wants to update so initial t1 updates the data and version is v1 and after updating the version will be v2 and now suppose t1 and t2 parallelly trying to update the data than while updating data if version got changed suppose t1 changed the data to v3 but t2 was expecting version to be v2 in that case t2 will get fail. so after that we can do anything with that either retry or either fail or throw the error.
-![optimistic](../../../images/optimistic.png)
+![optimistic](../../../images/optimistic.PNG)
 
 if there is a article and 500 people are trying to update than it will be not good idea to use optimistic lock because lots of version mismatch will fail.
 
@@ -247,14 +247,16 @@ This protocol ensures the serializability by dividing the execution of a transac
 
 1. **Growing Phase**: A transaction can acquire locks but cannot release any. This phase continues until the transaction has obtain all the lock it needs.
 2. **Shrinking Phase:** After the transaction release its first lock it can not acquire any new locks. During this phase the transaction release all the locks it holds.
-![graph](../../../images/graph.png)
+![graph](../../../images/graph.PNG)
 
 This rule **prevents conflicting operations** from happening in the wrong order.
 
 - Multiple transactions **can run together**.
 - But they **wait** for each other when needed.
 - So there is **controlled interleaving**, but **no data conflict**.
-![2pl-ex](../../../images/2pl-ex.png)
+
+![2pl-ex](../../../images/2pl-ex.PNG)
+
 So here in above image T1 is acquiring the exclusive lock on A and after that performing read and write operation now T2 comes but it will not be able to acquire lock because it is in growing phase and now T1 acquires the shared lock on B and performing Read on B and after that is releasing the lock on A and B and now T2 can acquire lock so it is showing concurrently but things is happening serially.
 So in S-X locking there were some disadvantage which we have achieve here like Serializability, Concurrently, Data Integrity(keeping the **data correct, accurate, and trustworthy** in a database.). but Starvation, Deadlock, and Data Irrecoverable is still persist from S-X locking.
 
@@ -315,7 +317,8 @@ cannot occur because no transaction will ever hold some locks and wait for other
 
 **Cons** less concurrency
 
-![2pl](../../../images/2pl.png)
+![2pl](../../../images/2pl.PNG)
+
 So here T1 comes and acquire all the locks on A and B so till than T1 completes T2 cannot do any transaction.
 
 **Timestamp-Based Protocols: It assign a unique timestamp**
@@ -331,7 +334,7 @@ Write Timestamp (WTS): The last timestamp of any transaction that has
 successfully written the data item.
 
 Transaction with smaller timestamp(Old) -> Transaction with larger timestamp(young)
-![TBL](../../../images/TBL.png)
+![TBL](../../../images/tbl.PNG)
 
 **Explanation:**
 - **Older transaction** = started earlier
@@ -355,7 +358,7 @@ For **Write**:
 
 **Cascading Abort**
 Suppose we have two transaction t1 and t2 so t1 started acquire all the lock in growing phase and now T1 moves to shrinking phase so T2 acquires the lock and reads the value which is dirty read because T1 has aborted.
-![Cascade](../../../images/cascade.png)
+![Cascade](../../../images/cascade.PNG)
 
 
 ----------
@@ -371,58 +374,58 @@ So Isolation tell till what level of concurrency applied in your application.
 
 **Dirty Read**
 
-![dirty](../../../images/dirty.png)
+![dirty](../../../images/dirty.PNG)
 
 Reading data written by a transaction that has not yet committed. consider it T1 and T2 are two transaction so suppose t1 is doing set of operations which includes multiple write and read operation and same time t2 comes and read the value which will get updated value but at some point t1 fails and rollback than t2 has read the wrong value which is an data anomaly.
 
-![Dirty Read](../../../images/dirty-read.png)
-![dirty example](../../../images/dirty-ex.png)
+![Dirty Read](../../../images/dirty-read.PNG)
+![dirty example](../../../images/dirty-ex.PNG)
 
 
 **Non Repeatable Read**
 
 if suppose Transaction A reads the same row several times and there is a chance that it reads the different value.
-![repeat-ex](../../../images/repeat-ex.png)
+![repeat-ex](../../../images/repeat-ex.PNG)
 
-![Non Repeatable](../../../images/non-repeat.png)
+![Non Repeatable](../../../images/non-repeat.PNG)
 
 Example:
 Consider again we are doing two transaction t1 and t2 and t1 has two read operation and does some write operation in different table and t2 has read write operation in same table which t1 is using and now what happened t1 reads the value as 10 and after that it got stop for some reason and mean time t2 updated the data from 10 to 20 and again when t1 reads the data so it will get data as 20 but it started operation on 10  so that is another anomaly.
 
 **Phantom Read**
 If suppose transaction A, executes same query several times and there is a chance that the rows returned are different.
-![phantom-ex](../../../images/phantom-ex.png)
+![phantom-ex](../../../images/phantom-ex.PNG)
 
-![phantom](../../../images/phantom.png)
+![phantom](../../../images/phantom.PNG)
 Example: suppose their is one transaction t1 which fetch the records does some operation and again fetch some records but while t1 is performing the operation in same time t2 came and insert one new row in the table so now when t1 reads the same  table data it gets 3 column instead of 2 because new row inserted that is another anomaly.
 
 **Type of Isolation level**
 
-![level example](../../../images/level-ex.png)
+![level example](../../../images/level-ex.PNG)
 
-![level](../../../images/level.png)
+![level](../../../images/level.PNG)
 
 **Read Uncommitted**
 No lock is acquired so all 3 above anomaly is not resolved.
 
-![read uncommitted](../../../images/read-uncommitted.png)
+![read uncommitted](../../../images/read-uncommitted.PNG)
 As name suggests it says data is uncommitted but t1 can read the data of t2 transaction so it does not resolve any anomalies.
 
 **Read Committed**
-![read committed](../../../images/read-committed.png)
+![read committed](../../../images/read-committed.PNG)
 
 so it clearly says t1 will be able to read the data when t2 commits its data so it solves only dirty read problem.
 here what will happen suppose t1 and t2 two transaction are their so t2 comes acquire exclusive lock and updates the data so next time t1 comes to read the data it will get updated value and t1 acquire read lock so it will allow al read operation but not write operation. which solves dirty read but non-repeatable is not because in between updated and t1 will get initially different value later on different value in same transaction and phantom is also not solved because updating is happening.
 
 **Read Repeatable**
-![repeat read](../../../images/repeat-read.png)
+![repeat read](../../../images/repeat-read.PNG)
 
 it clearly says t1 is reading the value and doing some operation so t2 cannot come and do not insert any new record which solves the phantom problem.
 
 here what will happen we have t1 and t2 and t1 acquire the shared lock but it release the lock at the end of transaction so t2 will not be able to get exclusive lock so in that way it will be able to solve the both dirty read and non-repeatable read. but t2 can acquire read lock that is why phantom is possible.
 
 **Serializable**
-![serial](../../../images/serial.png)
+![serial](../../../images/serial.PNG)
 here no anomaly will be present. so here we are performing a query ID>= 1and ID <=4 so in this range is lock so all rows will be lock so no other transaction can update.
 
 So based on question we will decide which fits better based on above consistency graph.
