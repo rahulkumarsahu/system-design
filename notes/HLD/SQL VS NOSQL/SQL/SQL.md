@@ -176,8 +176,39 @@ we can use synchronize so at a time only one user1 have access so user 1 will bo
 So the problem will be in one process multiple threads are there so synchronize will be able to handle the request but suppose we have microservice in that their will be multiple processes so in that case synchronize will not work and it will give the error comes optimistic and pessimistic locking.
 
 **DB Locking make sure that no other transaction update the locker rows.**
-1. shared lock (suppose one transaction acquire the shared lock than only read can happen but not write by other transaction but here multiple transaction can have shared lock only for reading)
-2. exclusive lock (suppose one transaction acquire the shared lock than it cannot even read it and cannot even write it by other transaction but this lock can be acquired by only one transaction)
+1. **shared lock** (suppose one transaction acquire the shared lock than only read can happen but not write by other transaction but here multiple transaction can have shared lock only for reading) 
+	Allows multiple transactions to read a data item simultaneously
+    but prevents any of them from modifying it. Multiple transactions can hold a shared
+    lock on the same data item at the same time.
+2. **exclusive lock** (suppose one transaction acquire the shared lock than it cannot even read it and cannot even write it by other transaction but this lock can be acquired by only one transaction)
+	Allows a transaction to both read and modify a data item.
+	When an exclusive lock is held by a transaction, no other transaction can read or
+	modify the data item.
+**Note** : 
+3. When a transaction acquires a shared lock on a data item, other transactions can also
+   acquire shared locks on that same item, enabling concurrent reads. However, no transaction
+   can acquire an exclusive lock on that item as long as one or more shared locks are held.
+4. When a transaction acquires an exclusive lock on a data item, it has full control over that
+   item, meaning it can both read and modify it. No other transaction can acquire a lock on the
+   same data item until the exclusive lock is released.
+So when shared lock is acquire we can have n number of shared lock no exclusive lock. if there is an exclusive lock no shared or exclusive lock can be possible.
+
+**Drawbacks of shared-exclusive locks**
+**Performance issues** : Managing locks requires additional CPU and memory resources. The
+process of acquiring, releasing, and managing locks can introduce significant overhead
+
+**Concurrency issues** : Exclusive locks prevent other transactions from accessing locked
+data, which can significantly reduce concurrency.
+
+**Starvation**: Some transactions may be delayed if higher-priority transactions consistently
+acquire locks before them, leading to starvation where a transaction never gets to proceed.
+
+**Deadlocks** : Shared and exclusive locks can lead to deadlocks, where two or more
+transactions hold locks that the other transactions need.
+
+**Irrecoverable** : If Transaction B commits after the lock is release based on a modified value
+in transaction A which fails after sometime. so T1 acquires the X lock and does some operation and T2 acquire X lock and does some update in same table but T1 got fail later on so it will rollback the changes but in that case T2 is not get rollback.
+
 ![locking](../../../images/lock.png)
 
 ***Pessimistic Locking***
@@ -205,6 +236,15 @@ here I am considering 3rd column as version suppose same here 2 transaction is t
 ![optimistic](../../../images/optimistic.png)
 
 if there is a article and 500 people are trying to update than it will be not good idea to use optimistic lock because lots of version mismatch will fail.
+
+**Two-Phase Locking (2PL)**
+
+This protocol ensures the serializability by dividing the execution of a transaction in two phase.
+
+1. **Growing Phase**: A transaction can acquire locks but cannot release any. This phase continues until the transaction has obtain all the lock it needs.
+2. **Shrinking Phase:** After the transaction release its first lock it can not acquire any new locks. During this phase the transaction release all the locks it holds.
+![2pl-ex](../../../images/2pl-ex.png)
+So here in above image 
 
 ---------------
 
@@ -299,7 +339,7 @@ Recovery Technique:
 3. Shadow Paging: Maintain two copies of the database pages; one is updated and the other remains unchanged until the transaction commits.
 --------------
 
-
+***Indexing***
 
 
 
