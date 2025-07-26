@@ -325,7 +325,24 @@ successfully written the data item.
 Transaction with smaller timestamp(Old) -> Transaction with larger timestamp(young)
 ![TBL](../../../images/TBL.png)
 
-
+**Explanation:**
+- **Older transaction** = started earlier
+- **Younger transaction** = started later
+For **Read**:
+- If **younger** tries to read data from **older (not committed)** → ❌ **Rollback younger**
+- If **older** tries to read data written by **younger** → ❌ **Rollback younger**
+- Because T1 (which **started earlier**) is **reading data created by a transaction that started later (T2)**. That breaks the timestamp order. It would **look like T2 happened before T1**, even though T2 is younger. This is like seeing the **future** — T1 is not supposed to know what T2 will write
+- ✅ **Older always wins**
+For **Write**:
+- If **younger** tries to write to data already read/written by **older** → ❌ **Rollback younger**. This creates a situation where **T1 used outdated data**, and if **T2 commits first**, it looks like **T1 read something that never existed in the final DB**.
+- If **older** tries to write → ✅ **Allowed**
+ 
+ **Final Trick to Remember:**
+> **"Older wins, younger rolls back"**  
+> Always check:  
+> 🔸 Is younger doing something after older touched the data?  
+> 🔸 If yes → **Rollback younger**
+> In timestamp ordering protocol, **younger transactions can’t disturb what older transactions did**So we **rollback the younger one** to **protect the older one's work** and **keep order correct**.
 ---------------
 
 **Isolation Level**
